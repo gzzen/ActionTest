@@ -1,0 +1,79 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://asset/img/flip/flip1.png" type="Texture" id=1]
+[ext_resource path="res://asset/img/flip/flip2.png" type="Texture" id=2]
+[ext_resource path="res://asset/img/fight/Sprite-0005.png" type="Texture" id=3]
+[ext_resource path="res://asset/img/fight/Sprite-0006.png" type="Texture" id=4]
+[ext_resource path="res://Player.gd" type="Script" id=5]
+[ext_resource path="res://asset/img/flip/flip5.png" type="Texture" id=6]
+[ext_resource path="res://asset/img/flip/flip3.png" type="Texture" id=7]
+[ext_resource path="res://asset/img/flip/flip4.png" type="Texture" id=8]
+[ext_resource path="res://asset/img/flip/flip6.png" type="Texture" id=9]
+[ext_resource path="res://asset/img/flip/flip7.png" type="Texture" id=10]
+[ext_resource path="res://asset/img/stand/stand2.png" type="Texture" id=11]
+[ext_resource path="res://asset/img/run/run1.png" type="Texture" id=12]
+[ext_resource path="res://asset/img/run/run2.png" type="Texture" id=13]
+[ext_resource path="res://asset/img/fight/Sprite-0004.png" type="Texture" id=14]
+[ext_resource path="res://asset/img/fight/Sprite-0003.png" type="Texture" id=15]
+[ext_resource path="res://asset/img/stand/stand1.png" type="Texture" id=16]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 6 ), ExtResource( 9 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "flip",
+"speed": 14.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "fight_2",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 16 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "stand",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 15 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "fight_1",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 12 ), ExtResource( 13 ) ],
+"loop": true,
+"name": "run",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 5.13992
+height = 0.0
+
+[node name="Player" type="Area2D"]
+scale = Vector2( 10, 10 )
+script = ExtResource( 5 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( -0.979424, -1.95886 )
+frames = SubResource( 1 )
+animation = "flip"
+
+[node name="FlipTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="FightTimer" type="Timer" parent="."]
+wait_time = 0.2
+
+[node name="DamageCollision" type="CollisionShape2D" parent="."]
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="FightCollision" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2( 1.1893, 0.699586 )
+scale = Vector2( 1, 1 )
+shape = SubResource( 2 )
+[connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="timeout" from="FlipTimer" to="." method="_on_FlipTimer_timeout"]
+[connection signal="timeout" from="FightTimer" to="." method="_on_FightTimer_timeout"]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
